@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/stylesheets/coinflipstar.css">
+  <div class="row">
+      <div class="col-6">
+        <div class="card mb-3">
+            <img src="<%=foundPlace.image%>" class="card-img-top" alt="...">
+            <div class="card-body">
+              <%=msg%>
+              <h5 class="card-title"><%=foundPlace.title%></h5>
+              <p class="card-text"><%=foundPlace.description%></p>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item text-muted"><%=foundPlace.location%></li>
+              <li class="list-group-item text-muted">Created by: <%=foundPlace.author.username%></li>
+              <li class="list-group-item">$<%=foundPlace.price%>/per night</li>
+            </ul>
+            <%if(currentUser && foundPlace.author.equals(currentUser)){ %>
+            <div class="card-body">
+              <a href="/places/<%=foundPlace.id%>/edit" class="card-link btn btn-warning">Edit</a>
+              <form class='d-inline' action="/places/<%=foundPlace.id%>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+              
+            </div>
+          <%}%>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+          </div>
+      </div>
+      <div class="col-6">
+        <%if(currentUser){%>
+        <h3>Leave a Review</h3>
+        <form action="/places/<%=foundPlace.id%>/review" class="mb-3 needs-validation" method="POST" novalidate>
+          <div class="mb-3">
+            <fieldset class="starability-coinFlip">
+              <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+              <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+              <label for="first-rate1" title="Terrible">1 star</label>
+              <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+              <label for="first-rate2" title="Not good">2 stars</label>
+              <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+              <label for="first-rate3" title="Average">3 stars</label>
+              <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+              <label for="first-rate4" title="Very good">4 stars</label>
+              <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+              <label for="first-rate5" title="Amazing">5 stars</label>
+            </fieldset>
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label">Review </label>
+              <textarea name="review[body]" id="body" class="form-control" required cols="30" rows="3"></textarea>
+              <div class="valid-feedback">
+                Looks good!
+              </div>
+          </div>
+          <button class="btn btn-success">Submit</button>
+        </form>
+      <%}%> 
+        <%for(let review of foundPlace.reviews ){%>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title"><%=review.author.username%></h5>
+          <p class="starability-result" data-rating="<%=review.rating%>">
+            Rated: <%=review.rating%> stars
+          </p>
+          <p class="card-text">Comment: <%=review.body%></p>
+          <%if(currentUser && review.author.equals(currentUser)){ %>
+          <form action="/places/<%=foundPlace.id%>/review/<%=review.id%>?_method=DELETE" method="POST">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        <%}%>
+        </div>
+      </div>
+
+        <%}%>
+      </div>
+  </div>
+
+

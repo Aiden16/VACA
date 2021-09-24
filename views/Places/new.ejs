@@ -4,7 +4,7 @@
         New Place
     </h1>
     <div class="col-6 offset-3">
-        <form action="/places" method="Post" class="needs-validation" novalidate> <!--novalidate is to switch off inbuilt validation-->
+        <form action="/places" method="Post" class="needs-validation" novalidate enctype="multipart/form-data"> <!--novalidate is to switch off inbuilt validation-->
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input type="text" class="form-control" name="places[title]" id="title" required>
@@ -20,13 +20,18 @@
                     Looks good!
                   </div>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label class="form-label" for="image">Image Url</label>
                 <input type="text" class="form-control" name="places[image]" id="image" required>
                 <div class="valid-feedback">
                     Looks good!
                   </div>
-            </div>
+            </div> -->
+            <div class="mb-3">
+                <label for="formFile" class="form-label">Add Images</label>
+                <input class="form-control" type="file" name="image" multiple id="formFile">
+              </div>
+            <!-- <input type="file" name='image' multiple> -->
             <div class="mb-3">
                 <label class="form-label" for="price">Price</label>
                 <div class="input-group">

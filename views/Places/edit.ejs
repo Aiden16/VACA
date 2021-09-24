@@ -2,7 +2,7 @@
 
 
     <div class="col-6 offset-3">
-        <form action="/places/<%=foundPlace.id%>?_method=PUT" method="Post" novalidate class="needs-validation">
+        <form action="/places/<%=foundPlace.id%>?_method=PUT" method="Post" novalidate class="needs-validation" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label" for="title">Title</label>
                 <input type="text" class="form-control" name="places[title]" value="<%=foundPlace.title%>" id="title" required>
@@ -11,10 +11,10 @@
                 <label class="form-label" for="location">Location</label>
                 <input type="text" class="form-control" name="places[location]" value="<%=foundPlace.location%>" id="location" required>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="image">Image Url</label>
-                <input type="text" class="form-control" name="places[image]" value="<%=foundPlace.image%>" id="image" required>
-            </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Add Images</label>
+                    <input class="form-control" type="file" name="image" multiple id="formFile">
+                  </div>
             <div class="mb-3">
                 <label class="form-label" for="price">Price</label>
                 <div class="input-group">
@@ -27,11 +27,18 @@
                 <label class="form-label" for="description">Description</label>
                 <textarea type="text" class="form-control" name="places[description]" value="<%=foundPlace.description%>"id="description" required><%=foundPlace.description%></textarea>
             </div
-
+            <div class="mb-3">
+                <% foundPlace.images.forEach(function(img, i) {  %>
+                <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
+                <div class="form-check-inline">
+                    <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+                </div>
+                <label for="image-<%=i%>">Delete?</label>
+                <% })%>
+            </div>
             <div class="mb-3">
             <button class="btn btn-info">Update</button>
             <a href="/places" class="btn btn-primary">Go back</a>
-
             </div>
         </form>
         <div class="mb-3">

@@ -26,7 +26,12 @@ const seed = async()=>{
             author:'612218b28cc5f8088c0f6689',
             title:`${randomTitle(descriptors)} ${randomTitle(places)}`,
             location:`${cities[random1000].city},${cities[random1000].state}`,
-            image:`https://source.unsplash.com/collection/583479/800x700`,
+            images: [ 
+                 {
+                url: 'https://res.cloudinary.com/dvdnsiqrt/image/upload/v1632419228/VACA/gdlmoss0wkqyavlwh7ig.jpg',
+                filename: 'VACA/gdlmoss0wkqyavlwh7ig'
+              }
+            ],
             description:'Peter Piper picked a peck of pickled peppers A peck of pickled peppers Peter Piper picked If Peter Piper picked a peck of pickled peppers Where the peck of pickled peppers Peter Piper picked?',
             price
         })

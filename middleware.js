@@ -39,6 +39,7 @@ module.exports.isReviewAuthor = async(req,res,next)=>{
 
 //custom middleware to validate places
 module.exports.validatePlaces = (req, res, next) => {
+    console.log(req.body)
     const { error } = placeSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(el => el.message).join(',')

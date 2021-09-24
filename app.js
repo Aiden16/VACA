@@ -1,3 +1,8 @@
+if (process.env.NODE_ENV!=="production"){
+    require('dotenv').config()
+}
+console.log(process.env.CLOUDINARY_CLOUD_NAME)
+
 const express = require('express')
 const session = require('express-session')
 const flash = require('connect-flash');
@@ -15,6 +20,7 @@ const passport = require('passport')
 const localStrategy = require('passport-local')
 const User = require('./Models/user')
 // const {reviewSchema} = require('./schema')
+
 
 mongoose.connect('mongodb://localhost:27017/Vaca', {
     useNewUrlParser: true,

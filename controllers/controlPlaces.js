@@ -1,4 +1,5 @@
 const Place = require('../Models/vaca')
+const {cloudinary} = require('../cloudinary/index')
 //index
 module.exports.index = async(req,res)=>{
     const places = await Place.find({})
@@ -8,9 +9,15 @@ module.exports.index = async(req,res)=>{
 //post new place
 module.exports.createPlace=async(req,res)=>{
     // if(!req.body.places) throw new ExpressError('Invalid data',400)
+    console.log(req.body)
+    console.log('========>',req.files)
+
     const newPlace = new Place(req.body.places)
+    //cloudinary stuff
+    newPlace.images=req.files.map(f=>({url:f.path,filename:f.filename}))
     newPlace.author = req.user.id
     await newPlace.save()
+    console.log(newPlace)
     req.flash('success','Successfully made a new post')
     res.redirect(`/places/${newPlace.id}`)
 
@@ -53,7 +60,21 @@ module.exports.editForm = async(req,res)=>{
 //put edit
 
 module.exports.putEdit = async(req,res)=>{
+    console.log('---------------------------------------------------')
+    console.log('===================>',req.body.deleteImages)
+    console.log('---------------------------------------------------')
+
     const edit = await Place.findByIdAndUpdate(req.params.id,{...req.body.places})
+    const images = req.files.map(f=>({url:f.path,filename:f.filename})) //array
+    edit.images.push(...images) //so spread the elements of array
+    await edit.save()
+    if(req.body.deleteImages){
+        for(let image of req.body.deleteImages){
+            await cloudinary.uploader.destroy(image)
+        }
+        await edit.updateOne({$pull:{images:{filename:{$in:req.body.deleteImages}}}})
+        console.log(edit)
+    }
     req.flash('success','Successfully updated post')
     res.redirect(`/places/${edit.id}`)
 

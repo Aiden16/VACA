@@ -1,4 +1,8 @@
 const Place = require('../Models/vaca')
+//mapbox
+const mbxGeocoding = require('@mapbox/mapbox-sdk/services/geocoding')
+const mapBoxToken = process.env.MAPBOX_TOKEN
+const geoCoder = mbxGeocoding({accessToken : mapBoxToken})
 const {cloudinary} = require('../cloudinary/index')
 //index
 module.exports.index = async(req,res)=>{
@@ -9,10 +13,17 @@ module.exports.index = async(req,res)=>{
 //post new place
 module.exports.createPlace=async(req,res)=>{
     // if(!req.body.places) throw new ExpressError('Invalid data',400)
-    console.log(req.body)
-    console.log('========>',req.files)
+    const geoData = await geoCoder.forwardGeocode({
+        query:req.body.places.location,
+        limit:1
+    }).send()
+    // console.log('+++++++++++++++++++++++++++++++++++++++++++++>',geoData.body.features)
+    // res.send(geoData.body.features[0].geometry.coordinates) 
+    // console.log(req.body)
+    // console.log('========>',req.files)
 
     const newPlace = new Place(req.body.places)
+    newPlace.geometry = geoData.body.features[0].geometry
     //cloudinary stuff
     newPlace.images=req.files.map(f=>({url:f.path,filename:f.filename}))
     newPlace.author = req.user.id
@@ -32,7 +43,7 @@ module.exports.viewPlace = async(req,res)=>{
         }
     }).populate('author')
     
-    console.log(foundPlace)
+    // console.log(foundPlace)
     if(!foundPlace){
         req.flash('error','Cannot find that place!')
         res.redirect('/places')

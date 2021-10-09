@@ -19,13 +19,20 @@ const randomTitle = (array)=>{
 }
 const seed = async()=>{
     await Place.deleteMany({});
-    for(let i=0;i<=50;i++){
+    for(let i=0;i<=300;i++){
         const random1000 = Math.floor(Math.random()*1000);
         const price = Math.floor(Math.random()*30)+10
         const newPlace = new Place({
             author:'612218b28cc5f8088c0f6689',
             title:`${randomTitle(descriptors)} ${randomTitle(places)}`,
             location:`${cities[random1000].city},${cities[random1000].state}`,
+            geometry:{
+                type:"Point",
+                coordinates: [
+                    cities[random1000].longitude,
+                    cities[random1000].latitude
+                ]
+            },
             images: [ 
                  {
                 url: 'https://res.cloudinary.com/dvdnsiqrt/image/upload/v1632419228/VACA/gdlmoss0wkqyavlwh7ig.jpg',

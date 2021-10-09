@@ -1,6 +1,8 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/stylesheets/coinflipstar.css">
 
+
+
   <div class="row">
       <div class="col-6">
         <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
@@ -63,6 +65,8 @@
           </div>
       </div>
       <div class="col-6">
+        <div id='map' style='width: 400px; height: 300px;'></div>
+
         <%if(currentUser){%>
         <h3>Leave a Review</h3>
         <form action="/places/<%=foundPlace.id%>/review" class="mb-3 needs-validation" method="POST" novalidate>
@@ -110,5 +114,11 @@
         <%}%>
       </div>
   </div>
+
+  <script>
+    const mapToken =  '<%-process.env.MAPBOX_TOKEN%>'
+    const place = <%- JSON.stringify(foundPlace) %>
+  </script>
+  <script src='/javascripts/showPageMap.js'></script>
 
 

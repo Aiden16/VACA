@@ -1,4 +1,5 @@
     <% layout('layouts/boilerplate') %>
+    <div id="map" style="width: 100%; height: 500px;"></div>
     <h3>All places</h3>
         <% for(let place of places){ %>
             <div class="card" mb-3>
@@ -10,6 +11,8 @@
                         <div class="card-body">
                             <h5 class="card-title">
                                 <%=place.title%>
+                            </h5>
+                            <h5 class="card-title">
                             </h5>
                             <p class="card-text">
                                 <%=place.description%>
@@ -24,3 +27,8 @@
             </div>
         <% } %>
 
+<script>
+    const mapToken =  '<%-process.env.MAPBOX_TOKEN%>'
+    const place = {features:<%- JSON.stringify(places) %>}
+</script>
+<script src='/javascripts/clusterMap.js'></script>

@@ -2,7 +2,6 @@ if (process.env.NODE_ENV!=="production"){
     require('dotenv').config()
 }
 console.log(process.env.CLOUDINARY_CLOUD_NAME)
-
 const express = require('express')
 const session = require('express-session')
 const flash = require('connect-flash');
@@ -19,10 +18,12 @@ const { placeSchema,reviewSchema } = require('./schema.js');
 const passport = require('passport')
 const localStrategy = require('passport-local')
 const User = require('./Models/user')
+const MongoStore = require('connect-mongo');
 // const {reviewSchema} = require('./schema')
+// const dbUrl = process.env.DB_URL
 
-
-mongoose.connect('mongodb://localhost:27017/Vaca', {
+const dbUrl = process.env.DB_URL||'mongodb://localhost:27017/Vaca'
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex:true,
@@ -44,8 +45,22 @@ const placesRoutes = require('./routes/places')
 const reviewsRoutes = require('./routes/reviews')
 const userRoutes = require('./routes/user')
 //--session-----//
+
+//to store session details in mongo rather than in memory
+const secret = process.env.SECRET || 'Thisisasecret'
+
+const store = new MongoStore({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter:24*3600
+})
+
+store.on('error',function(e){
+    console.log("Store error!",e)
+})
 const sessionConfig = {
-    secret:'Thisisasceret',
+    store:store,    
+    secret,
     resave:false,
     saveUninitialized:true,
     cookies:{
@@ -88,7 +103,7 @@ app.use('/places/:id/review',reviewsRoutes)
 
 
 app.get('/',(req,res)=>{
-    res.send('Hello from VACA')
+    res.render('Places/home')
 })
 
 app.get('/newPlace',async(req,res)=>{

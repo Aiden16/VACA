@@ -4,7 +4,8 @@
   "description": "A web app where users can post about the places they have been during their vacations.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
   },
   "author": "Nitish Jha",
   "license": "ISC",
